@@ -17,7 +17,6 @@ package com.github.tomakehurst.wiremock.http;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Returns log normally distributed values. Takes two parameters, the median (50th percentile) of
@@ -29,26 +28,26 @@ import java.util.concurrent.ThreadLocalRandom;
  *     href="https://www.wolframalpha.com/input/?i=lognormaldistribution%28log%2890%29%2C+0.1%29">lognormal
  *     example</a>
  */
-public class LogNormal implements DelayDistribution {
+public class CappedLogNormal extends LogNormal {
 
-  @JsonProperty("median")
-  private final double median;
-
-  @JsonProperty("sigma")
-  private final double sigma;
+  @JsonProperty("maxValue")
+  private final double maxValue;
 
   /**
    * @param median 50th percentile of the distribution in millis
    * @param sigma standard deviation of the distribution, a larger value produces a longer tail
    */
   @JsonCreator
-  public LogNormal(@JsonProperty("median") double median, @JsonProperty("sigma") double sigma) {
-    this.median = median;
-    this.sigma = sigma;
+  public CappedLogNormal(
+      @JsonProperty("median") double median,
+      @JsonProperty("sigma") double sigma,
+      @JsonProperty("maxValue") double maxValue) {
+    super(median, sigma);
+    this.maxValue = maxValue;
   }
 
   @Override
   public long sampleMillis() {
-    return Math.round(Math.exp(ThreadLocalRandom.current().nextGaussian() * sigma) * median);
+    return Math.round(Math.min(maxValue, super.sampleMillis()));
   }
 }

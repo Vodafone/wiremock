@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2023 Thomas Akehurst
+ * Copyright (C) 2015-2024 Thomas Akehurst
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,6 +144,23 @@ public class ResponseDelayAcceptanceTest {
 
     long start = System.currentTimeMillis();
     testClient.get("/lognormal/delayed/resource");
+    int duration = (int) (System.currentTimeMillis() - start);
+
+    assertThat(duration, greaterThanOrEqualTo(60));
+  }
+
+  @Test
+  public void responseWithCappedLogNormalDistributedDelay() {
+    stubFor(
+        get(urlEqualTo("/cappedlognormal/delayed/resource"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody("Content")
+                    .withCappedLogNormalRandomDelay(90, 0.1, 95)));
+
+    long start = System.currentTimeMillis();
+    testClient.get("/cappedlognormal/delayed/resource");
     int duration = (int) (System.currentTimeMillis() - start);
 
     assertThat(duration, greaterThanOrEqualTo(60));
