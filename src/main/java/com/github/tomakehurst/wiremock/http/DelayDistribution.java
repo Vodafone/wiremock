@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Thomas Akehurst
+ * Copyright (C) 2015-2024 Thomas Akehurst
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = LogNormal.class, name = "lognormal"),
   @JsonSubTypes.Type(value = UniformDistribution.class, name = "uniform"),
-  @JsonSubTypes.Type(value = FixedDelayDistribution.class, name = "fixed")
+  @JsonSubTypes.Type(value = FixedDelayDistribution.class, name = "fixed"),
+  @JsonSubTypes.Type(value = CappedLogNormal.class, name = "cappedlognormal")
 })
 public interface DelayDistribution {
   /**
