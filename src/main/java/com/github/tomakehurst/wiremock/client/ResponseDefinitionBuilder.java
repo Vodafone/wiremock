@@ -166,6 +166,10 @@ public class ResponseDefinitionBuilder {
     return withRandomDelay(new UniformDistribution(lowerMilliseconds, upperMilliseconds));
   }
 
+  public ResponseDefinitionBuilder withFileBasedDelay(String key) {
+    return withRandomDelay(new FileBasedDistribution(key));
+  }
+
   public ResponseDefinitionBuilder withChunkedDribbleDelay(int numberOfChunks, int totalDuration) {
     this.chunkedDribbleDelay = new ChunkedDribbleDelay(numberOfChunks, totalDuration);
     return this;

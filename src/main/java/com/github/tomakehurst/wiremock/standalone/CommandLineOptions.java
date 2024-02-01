@@ -47,6 +47,7 @@ import com.github.tomakehurst.wiremock.security.BasicAuthenticator;
 import com.github.tomakehurst.wiremock.security.NoAuthenticator;
 import com.github.tomakehurst.wiremock.store.DefaultStores;
 import com.github.tomakehurst.wiremock.store.Stores;
+import com.google.common.collect.ImmutableList;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
@@ -130,6 +131,9 @@ public class CommandLineOptions implements Options {
   private static final String DISABLE_CONNECTION_REUSE = "disable-connection-reuse";
   private static final String PROXY_PASS_THROUGH = "proxy-pass-through";
   private static final String SUPPORTED_PROXY_ENCODINGS = "supported-proxy-encodings";
+
+  private static final String FILE_BASED_DISTRIBUTIONS_CONFIG_FILES =
+      "file-based-distributions-config-files";
 
   private final OptionSet optionSet;
 
@@ -401,6 +405,15 @@ public class CommandLineOptions implements Options {
     optionParser.accepts(VERSION, "Prints wiremock version information and exits");
 
     optionParser.accepts(HELP, "Print this message").forHelp();
+    optionParser
+        .accepts(
+            FILE_BASED_DISTRIBUTIONS_CONFIG_FILES,
+            "A list of config file names to use for file based distributions (relative to the "
+                + WireMockApp.FILES_ROOT
+                + " folder)")
+        .withOptionalArg()
+        .ofType(String.class)
+        .withValuesSeparatedBy(",");
 
     optionSet = optionParser.parse(args);
     validate();
@@ -1056,5 +1069,14 @@ public class CommandLineOptions implements Options {
     return optionSet.has(DISABLE_CONNECTION_REUSE)
         ? Boolean.parseBoolean((String) optionSet.valueOf(DISABLE_CONNECTION_REUSE))
         : DEFAULT_DISABLE_CONNECTION_REUSE;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<String> getFileBasedDistributionsConfigFiles() {
+    return optionSet.has(FILE_BASED_DISTRIBUTIONS_CONFIG_FILES)
+        ? ImmutableList.copyOf(
+            (List<String>) optionSet.valueOf(FILE_BASED_DISTRIBUTIONS_CONFIG_FILES))
+        : Collections.<String>emptyList();
   }
 }

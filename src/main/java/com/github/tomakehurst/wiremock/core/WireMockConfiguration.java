@@ -148,6 +148,7 @@ public class WireMockConfiguration implements Options {
   private Set<String> permittedSystemKeys = null;
   private Long maxTemplateCacheEntries = DEFAULT_MAX_TEMPLATE_CACHE_ENTRIES;
   private boolean templateEscapingDisabled = true;
+  private List<String> fileBasedDistributionsConfigFiles = null;
 
   private Set<String> supportedProxyEncodings = null;
 
@@ -602,6 +603,12 @@ public class WireMockConfiguration implements Options {
     return withSupportedProxyEncodings(Set.of(supportedProxyEncodings));
   }
 
+  public WireMockConfiguration fileBasedDistributionsConfigFiles(
+      List<String> fileBasedDistributionsConfigFiles) {
+    this.fileBasedDistributionsConfigFiles = fileBasedDistributionsConfigFiles;
+    return this;
+  }
+
   @Override
   public int portNumber() {
     return portNumber;
@@ -900,5 +907,9 @@ public class WireMockConfiguration implements Options {
   @Override
   public Set<String> getSupportedProxyEncodings() {
     return supportedProxyEncodings;
+
+  @Override
+  public List<String> getFileBasedDistributionsConfigFiles() {
+    return fileBasedDistributionsConfigFiles;
   }
 }

@@ -308,6 +308,9 @@ public class WarConfiguration implements Options {
 
   @Override
   public Set<String> getSupportedProxyEncodings() {
+
+  @Override
+  public List<String> getFileBasedDistributionsConfigFiles() {
     return null;
   }
 }

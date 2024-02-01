@@ -19,11 +19,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Returns log normally distributed values, capped at a maximum value to eliminate long tales. Takes three
- * parameters, the median (50th percentile) of the lognormal, the standard deviation of the underlying
- * normal distribution and the maximum value at which to cap the response delay.
+ * Returns log normally distributed values, capped at a maximum value to eliminate long tales. Takes
+ * three parameters, the median (50th percentile) of the lognormal, the standard deviation of the
+ * underlying normal distribution and the maximum value at which to cap the response delay.
  *
- * @see <a href="https://www.wolframalpha.com/input/?i=lognormaldistribution%28log%2890%29%2C+0.1%29">lognormal example</a>
+ * @see <a
+ *     href="https://www.wolframalpha.com/input/?i=lognormaldistribution%28log%2890%29%2C+0.1%29">lognormal
+ *     example</a>
  */
 public class CappedLogNormal extends LogNormal {
 
@@ -43,7 +45,8 @@ public class CappedLogNormal extends LogNormal {
     this.maxValue = maxValue;
 
     if (maxValue < median) {
-      throw new IllegalArgumentException("The max value has to be at least greater than the median");
+      throw new IllegalArgumentException(
+          "The max value has to be at least greater than the median");
     }
   }
 
@@ -52,14 +55,16 @@ public class CappedLogNormal extends LogNormal {
 
     long generatedValue = super.sampleMillis();
 
-    // Rather than capping the value at the max, if it's over the max value, then resample, but only do that a few times
+    // Rather than capping the value at the max, if it's over the max value, then resample, but only
+    // do that a few times
     int i = 0;
     while (generatedValue > maxValue && i < 10) {
       generatedValue = super.sampleMillis();
       i++;
     }
 
-    // Belt and braces, in the unlikely event the generated value is still over the max, cap it at the max
+    // Belt and braces, in the unlikely event the generated value is still over the max, cap it at
+    // the max
     return Math.round(Math.min(maxValue, generatedValue));
   }
 }
