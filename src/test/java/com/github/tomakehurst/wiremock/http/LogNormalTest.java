@@ -17,7 +17,7 @@ package com.github.tomakehurst.wiremock.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class LogNormalTest {
@@ -43,7 +43,8 @@ public class LogNormalTest {
 
   @Test
   public void samplingCappedLogNormalWithCapSameAsMaxHasExpectedMean() {
-    // This test should, on occasion, exercise the resampling of the distribution value when the initial generated
+    // This test should, on occasion, exercise the resampling of the distribution value when the
+    // initial generated
     // value(s) are higher than the max.
     samplingCappedLogNormalHasExpectedMean((long) median, 67.82);
   }
@@ -54,18 +55,17 @@ public class LogNormalTest {
       new CappedLogNormal(median, sigma, median);
     } catch (IllegalArgumentException ex) {
       // Fail - max = media is okay
-      Assert.fail("A maxValue matching median should not throw an exception");
+      Assertions.fail("A maxValue matching median should not throw an exception");
     }
 
     try {
       new CappedLogNormal(median, sigma, median - 1);
       // Fail - max = media is okay
-      Assert.fail("A maxValue less than median should throw an exception");
+      Assertions.fail("A maxValue less than median should throw an exception");
     } catch (IllegalArgumentException ex) {
       // Exception expected
     }
   }
-
 
   private void samplingCappedLogNormalHasExpectedMean(long maxCapValue, double expectedMean) {
     LogNormal distribution = new CappedLogNormal(median, sigma, maxCapValue);

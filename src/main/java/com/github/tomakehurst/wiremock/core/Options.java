@@ -153,4 +153,6 @@ public interface Options {
   boolean getTemplateEscapingDisabled();
 
   Set<String> getSupportedProxyEncodings();
+
+  List<String> getFileBasedDistributionsConfigFiles();
 }

@@ -37,3 +37,13 @@ oneOf:
         type: string
       upper:
         type: integer
+  - title: File based
+    description: Distribution delay externalised to a separate JSON file. Distributions for mappings are looked up by key.
+    type: object
+    properties:
+      key:
+        type: String
+      type:
+        enum:
+          - filebased
+        type: string
