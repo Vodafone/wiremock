@@ -17,28 +17,58 @@ package com.github.tomakehurst.wiremock.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 public class LogNormalTest {
 
+  private double median = 90.0;
+  private double sigma = 0.39;
+
   @Test
   public void samplingLogNormalHasExpectedMean() {
-    LogNormal distribution = new LogNormal(90.0, 0.39);
+    LogNormal distribution = new LogNormal(median, sigma);
     samplingLogNormalHasExpectedMean(distribution, 97.1115);
   }
 
   @Test
   public void samplingCappedLogNormalWithHighCapHasExpectedMean() {
-    samplingCappedLogNormalHasExpectedMean(150, 97.1115);
+    samplingCappedLogNormalHasExpectedMean(150, 88.15);
   }
 
   @Test
   public void samplingCappedLogNormalWithLowerCapHasExpectedMean() {
-    samplingCappedLogNormalHasExpectedMean(130, 91.385);
+    samplingCappedLogNormalHasExpectedMean(130, 83.6);
   }
 
+  @Test
+  public void samplingCappedLogNormalWithCapSameAsMaxHasExpectedMean() {
+    // This test should, on occasion, exercise the resampling of the distribution value when the initial generated
+    // value(s) are higher than the max.
+    samplingCappedLogNormalHasExpectedMean((long) median, 67.82);
+  }
+
+  @Test
+  public void samplingCappedLogNormalFailsIfMaxLessThanMedian() {
+    try {
+      new CappedLogNormal(median, sigma, median);
+    } catch (IllegalArgumentException ex) {
+      // Fail - max = media is okay
+      Assert.fail("A maxValue matching median should not throw an exception");
+    }
+
+    try {
+      new CappedLogNormal(median, sigma, median - 1);
+      // Fail - max = media is okay
+      Assert.fail("A maxValue less than median should throw an exception");
+    } catch (IllegalArgumentException ex) {
+      // Exception expected
+    }
+  }
+
+
   private void samplingCappedLogNormalHasExpectedMean(long maxCapValue, double expectedMean) {
-    LogNormal distribution = new CappedLogNormal(90.0, 0.39, maxCapValue);
+    LogNormal distribution = new CappedLogNormal(median, sigma, maxCapValue);
     samplingLogNormalHasExpectedMean(distribution, expectedMean);
   }
 
