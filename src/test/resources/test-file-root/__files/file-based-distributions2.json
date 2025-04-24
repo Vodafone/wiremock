@@ -1,0 +1,30 @@
+{
+  "GET:/file_based_distribution/fixed/override/test2": {
+    "milliseconds": 52,
+    "type": "fixed"
+  },
+  "GET:/file_based_distribution/fixed": {
+    "milliseconds": 50,
+    "type": "fixed"
+  },
+  "GET:/file_based_distribution/log_normal": {
+    "sigma": 0.1,
+    "median": 90,
+    "type": "lognormal"
+  },
+  "GET:/file_based_distribution/truncated_log_normal": {
+    "sigma": 0.1,
+    "median": 90,
+    "maxValue": 95,
+    "type": "lognormal"
+  },
+  "GET:/file_based_distribution/uniform": {
+    "upper": 75,
+    "lower": 25,
+    "type": "uniform"
+  },
+  "GET:/file_based_distribution/fixed/override/test3": {
+    "milliseconds": 52,
+    "type": "fixed"
+  }
+}

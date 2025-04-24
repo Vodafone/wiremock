@@ -17,6 +17,7 @@ package com.github.tomakehurst.wiremock.core;
 
 import static com.github.tomakehurst.wiremock.common.ParameterUtils.getFirstNonNull;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.admin.AdminRoutes;
 import com.github.tomakehurst.wiremock.admin.LimitAndOffsetPaginator;
 import com.github.tomakehurst.wiremock.admin.model.*;
@@ -642,5 +643,13 @@ public class WireMockApp implements StubServer, Admin {
 
   public Set<String> getLoadedExtensionNames() {
     return extensions.getAllExtensionNames();
+  }
+
+  public void configureFileBasedDistributions(WireMockServer wireMockServer) {
+    if (options.getFileBasedDistributionsConfigFiles() != null
+        && !options.getFileBasedDistributionsConfigFiles().isEmpty()) {
+      FileBasedDistributionMap.configureFromFiles(
+          options.filesRoot(), options.getFileBasedDistributionsConfigFiles());
+    }
   }
 }

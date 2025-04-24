@@ -78,6 +78,8 @@ public class WireMockServer implements Container, Stubbing, Admin {
     notifier.info("Using HTTP server impl: " + httpServer.getClass().getSimpleName());
 
     client = new WireMock(wireMockApp);
+
+    wireMockApp.configureFileBasedDistributions(this);
   }
 
   private HttpServerFactory getHttpServerFactory() {

@@ -160,6 +160,8 @@ public interface Options {
 
   Set<String> getSupportedProxyEncodings();
 
+  List<String> getFileBasedDistributionsConfigFiles();
+
   boolean getDisableConnectionReuse();
 
   int getWebhookThreadPoolSize();
